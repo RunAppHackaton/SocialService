@@ -1,6 +1,9 @@
 package com.runapp.socialservice.service;
 
 import jakarta.mail.internet.MimeMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
@@ -17,6 +20,7 @@ public class EmailServiceImp implements EmailService {
     @Value("${spring.mail.username}")
     private String fromEmail;
     private final JavaMailSender javaMailSender;
+    private static final Logger LOGGER = LoggerFactory.getLogger(EmailServiceImp.class);
 
     @Autowired
     public EmailServiceImp(JavaMailSender javaMailSender) {
@@ -25,6 +29,7 @@ public class EmailServiceImp implements EmailService {
 
     @Override
     public String sendMail(MultipartFile[] file, String to, String[] cc, String subject, String body) {
+        LOGGER.info("Send Mail: to={}, cc={}, subject={}, body={}", to, cc, subject, body);
         try {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 

@@ -1,0 +1,5 @@
+com\runapp\socialservice\SocialServiceApplication.class
+com\runapp\socialservice\config\MailConfig.class
+com\runapp\socialservice\service\EmailService.class
+com\runapp\socialservice\service\EmailServiceImp.class
+com\runapp\socialservice\controller\EmailSenderController.class
