@@ -24,10 +24,10 @@ management:
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: ${ENDPOINTS_INCLUDE:*}
   endpoint:
     health:
-      show-details: always
+      show-details: ${HEALTH_SHOW_DETAILS:always}
 
 eureka:
   client:
