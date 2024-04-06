@@ -1,0 +1,68 @@
+server:
+  port: ${SERVICE_SERVER_PORT:8090}
+
+spring:
+  application:
+    name: notification-service
+  profiles:
+    active: ${SPRING_PROFILE:default}
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+        auth: true
+    username: run.app.pet.project@gmail.com
+    password: ssisewukvqkmxugm
+
+  elasticsearch:
+    uris: ${ELASTICSEARCH_URI:https://elasticdeploy.es.europe-west3.gcp.cloud.es.io}
+  data:
+    mongodb:
+      uri: ${MONGO_URI:mongodb://username:password@localhost:27017/admin} # will correct later
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+  kafka:
+    bootstrap-servers: ${KAFKA_URI:pkc-xmzwx.europe-central2.gcp.confluent.cloud:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring:
+          deserializer:
+            value:
+              delegate:
+                class: org.springframework.kafka.support.serializer.JsonDeserializer
+    properties:
+      spring.json.type.mapping: notification:com.maksym.orderservice.kafka.producer.NotificationProducer, order-status:com.maksym.orderservice.kafka.consumer.OrderStatusConsumer
+      group-id: order-service
+
+    order-notification-topic: ${ORDER_NOTIFICATION_TOPIC:whishlist-notification-service-requests}
+    whishlist-notification-topic: ${ORDER_PAYMENT_TOPIC:whishlist-notification-service-requests}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: ${ENDPOINTS_INCLUDE:*}
+  endpoint:
+    health:
+      show-details: ${HEALTH_SHOW_DETAILS:always}
+
+swagger:
+  documentation:
+    uri: ${SWAGGER_URI:http://localhost:8080/swagger-ui/index.html}
+    spring:
+
+
+springdoc:
+  packages-to-scan: com.runapp.notificationservice
